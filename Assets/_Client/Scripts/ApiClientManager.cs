@@ -90,6 +90,8 @@ namespace PPGIA.X540.Project3.API
         [ContextMenu("Initiate Session")]
         public void InitiateSession()
         {
+            StopAllCoroutines();
+
             var url = EndpointUrl(_sessionInitEndpoint, _clientId);
 
             StartCoroutine(ApiClient.CallEndpointWithPostCoroutine(
@@ -103,12 +105,14 @@ namespace PPGIA.X540.Project3.API
 
         [ContextMenu("Close Session")]
         public void CloseSession()
-        {
+        {    
             if (_session == null)
             {
                 Debug.LogWarning("No active session to close.");
                 return;
             }
+
+            StopAllCoroutines();
 
             var url = EndpointUrl(_sessionCloseEndpoint, _session.SessionId);
 
@@ -130,6 +134,8 @@ namespace PPGIA.X540.Project3.API
                 return;
             }
 
+            StopAllCoroutines();
+
             // Build the endpoint URL and payload
             var url = EndpointUrl(_chatEndpoint, _session.SessionId);
             var payload = new ChatServicePayload { message = _query };
@@ -138,8 +144,18 @@ namespace PPGIA.X540.Project3.API
             StartCoroutine(ApiClient.CallEndpointWithPostCoroutine(
                 url, _timeoutInSeconds, payload, (request) =>
             {
-                StartCoroutine(ApiClient.ReadAudioResponseCoroutine(
-                    request, (audioClip) =>
+                var body = request.downloadHandler?.text ?? string.Empty;
+                var response = ApiModel.FromJson<ChatServiceResponse>(body);
+                var audioUrl = response?.AudioUrl;
+                if (string.IsNullOrEmpty(audioUrl))
+                {
+                    Debug.LogWarning("No audio URL in response.");
+                    return;
+                }
+                
+                Debug.Log($"Downloading audio from: {audioUrl}");
+                StartCoroutine(ApiClient.DownloadAudioCoroutine(
+                    audioUrl, _timeoutInSeconds, (audioClip) =>
                 {
                     if (audioClip == null)
                     {

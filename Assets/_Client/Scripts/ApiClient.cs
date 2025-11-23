@@ -52,7 +52,7 @@ namespace PPGIA.X540.Project3.API
                     byte[] bodyRaw = EncodePayload(payload);
                     Debug.Log($"Payload size: {bodyRaw.Length} bytes - {payload}");
                     request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-                } 
+                }
 
                 request.downloadHandler = new DownloadHandlerBuffer();
 
@@ -86,7 +86,7 @@ Response Body: {body}";
         }
 
         internal static IEnumerator CallEndpointWithGetCoroutine(
-            string url, float timeoutInSeconds, 
+            string url, float timeoutInSeconds,
             Action<UnityWebRequest> callbackOnSuccess)
         {
             yield return CallEndpointCoroutine(
@@ -94,7 +94,7 @@ Response Body: {body}";
         }
 
         internal static IEnumerator CallEndpointWithPostCoroutine(
-            string url, float timeoutInSeconds, object payload, 
+            string url, float timeoutInSeconds, object payload,
             Action<UnityWebRequest> callbackOnSuccess)
         {
             yield return CallEndpointCoroutine(
@@ -102,7 +102,7 @@ Response Body: {body}";
         }
 
         internal static IEnumerator CallEndpointWithPutCoroutine(
-            string url, float timeoutInSeconds, object payload, 
+            string url, float timeoutInSeconds, object payload,
             Action<UnityWebRequest> callbackOnSuccess)
         {
             yield return CallEndpointCoroutine(
@@ -110,58 +110,43 @@ Response Body: {body}";
         }
 
         internal static IEnumerator CallEndpointWithDeleteCoroutine(
-            string url, float timeoutInSeconds, 
+            string url, float timeoutInSeconds,
             Action<UnityWebRequest> callbackOnSuccess)
         {
             yield return CallEndpointCoroutine(
                 url, "DELETE", null, timeoutInSeconds, callbackOnSuccess);
         }
 
-        internal static IEnumerator ReadAudioResponseCoroutine(
-            UnityWebRequest request,
+        internal static IEnumerator DownloadAudioCoroutine(
+            string url,
+            float timeoutInSeconds,
             Action<AudioClip> callbackOnSuccess)
         {
-            byte[] audioBytes = request.downloadHandler.data;
-            if (audioBytes == null || audioBytes.Length == 0)
+            using (UnityWebRequest mmRequest =
+                    UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS))
             {
-                Debug.LogError("No audio data received.");
-                yield break;
-            }
 
-            // Save temporarily to file for loading as AudioClip
-            string tempPath = Path.Combine(Application.persistentDataPath, "tts_temp.ogg");
-            File.WriteAllBytes(tempPath, audioBytes);
-
-            using (var file = UnityWebRequestMultimedia.GetAudioClip(
-                "file://" + tempPath, AudioType.OGGVORBIS))
-            {
-                yield return file.SendWebRequest();
-
-                if (file.result == UnityWebRequest.Result.Success)
+                var op = mmRequest.SendWebRequest();
+                yield return WaitForTimeout(op, timeoutInSeconds, () =>
                 {
-                    AudioClip clip = DownloadHandlerAudioClip.GetContent(file);
-                    callbackOnSuccess?.Invoke(clip);
-                }
-                else
-                {
-                    Debug.LogError($"Error loading AudioClip: {file.error}");
-                }
-            }
+                    Debug.LogError("Request timed out.");
+                });
 
-            // Remove temporary file
-            File.Delete(tempPath);
+                if (mmRequest.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError($"Error loading audio: {mmRequest.error}");
+                    yield break;
+                }
+
+                AudioClip clip = DownloadHandlerAudioClip.GetContent(mmRequest);
+                if (clip == null)
+                {
+                    Debug.LogError("AudioClip is null after download.");
+                    yield break;
+                }
+
+                callbackOnSuccess?.Invoke(clip);
+            }
         }
-    }
-
-    internal enum Environment
-    {
-        Development,
-        Production
-    }
-
-    [Serializable]
-    internal struct ChatServicePayload
-    {
-        public string message;
     }
 }
