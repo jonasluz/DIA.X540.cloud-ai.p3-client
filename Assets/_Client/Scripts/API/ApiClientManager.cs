@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Linq;
 
 using UnityEngine;
@@ -51,6 +53,7 @@ namespace PPGIA.X540.Project3.API
         [Header("API State Information")]
         [SerializeField]
         private Session _session;
+        public bool IsSessionActive => _session != null;
         #endregion ------------------------------------------------------------
 
         #region -- Other Properties & Methods ---------------------------------
@@ -88,7 +91,7 @@ namespace PPGIA.X540.Project3.API
         }
 
         [ContextMenu("Session/Initiate Session")]
-        public void InitiateSession()
+        public void InitiateSession(Action sessionStartedCallback = null)
         {
             StopAllCoroutines();
 
@@ -100,15 +103,18 @@ namespace PPGIA.X540.Project3.API
                 var body = request.downloadHandler?.text ?? string.Empty;
                 var session = JsonUtility.FromJson<Session>(body);
                 _session = session;
+
+                sessionStartedCallback?.Invoke();
             }));
         }
 
         [ContextMenu("Session/Close Session")]
-        public void CloseSession()
-        {    
+        public void CloseSession(Action sessionClosedCallback = null)
+        {
             if (_session == null)
             {
                 Debug.LogWarning("No active session to close.");
+                sessionClosedCallback?.Invoke();
                 return;
             }
 
@@ -121,11 +127,14 @@ namespace PPGIA.X540.Project3.API
             {
                 Debug.Log("Session closed successfully.");
                 _session = null;
+                sessionClosedCallback?.Invoke();
             }));
         }
 
         [ContextMenu("Chat/Send Message")]
-        public void SendChatMessage()
+        public void SendChatMessage(string message = null,
+            Action<string> responseReceivedCallback = null,
+            Action speechFinishedCallback = null)
         {
             // Ensure there is an active session
             if (_session == null)
@@ -133,6 +142,8 @@ namespace PPGIA.X540.Project3.API
                 Debug.LogWarning("No active session. Please initiate a session first.");
                 return;
             }
+
+            if (message != null) _query = message;
 
             StopAllCoroutines();
 
@@ -146,13 +157,17 @@ namespace PPGIA.X540.Project3.API
             {
                 var body = request.downloadHandler?.text ?? string.Empty;
                 var response = ApiModel.FromJson<ChatServiceResponse>(body);
+
+                var chatResponse = response?.Message;
+                responseReceivedCallback?.Invoke(chatResponse);
+
                 var audioUrl = response?.AudioUrl;
                 if (string.IsNullOrEmpty(audioUrl))
                 {
                     Debug.LogWarning("No audio URL in response.");
                     return;
                 }
-                
+
                 Debug.Log($"Downloading audio from: {audioUrl}");
                 StartCoroutine(ApiClient.DownloadAudioCoroutine(
                     audioUrl, _timeoutInSeconds, (audioClip) =>
@@ -162,10 +177,25 @@ namespace PPGIA.X540.Project3.API
                         Debug.LogError("AudioClip is null after download.");
                         return;
                     }
-
-                    _audioSource?.PlayOneShot(audioClip);
+                    StartCoroutine(PlayAudioAndNotifyCoroutine(
+                        audioClip, speechFinishedCallback));
                 }));
             }));
+        }
+
+        private IEnumerator PlayAudioAndNotifyCoroutine(
+            AudioClip audioClip, Action onComplete)
+        {
+            if (_audioSource == null || audioClip == null)
+            {
+                onComplete?.Invoke();
+                yield break;
+            }
+
+            _audioSource.PlayOneShot(audioClip);
+            yield return new WaitForSeconds(audioClip.length);
+
+            onComplete?.Invoke();
         }
         #endregion -- API Calls ------------------------------------------------
 
