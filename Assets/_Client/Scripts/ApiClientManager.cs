@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace PPGIA.X540.Project3.API
 {
+    [RequireComponent(typeof(AudioSource))]
     public class ApiClientManager : MonoBehaviour
     {
         #region -- Inspector Fields -------------------------------------------
@@ -53,6 +54,9 @@ namespace PPGIA.X540.Project3.API
         #endregion ------------------------------------------------------------
 
         #region -- Other Properties & Methods ---------------------------------
+        [SerializeField]
+        private AudioSource _audioSource;
+
         // Property to get the appropriate API base URL
         private string ApiBaseUrl =>
             _environment == Environment.Development ?
@@ -64,7 +68,11 @@ namespace PPGIA.X540.Project3.API
             string.Join("/", parts.Select(p => p.Trim('/')));
         #endregion ------------------------------------------------------------
 
-        
+        void Awake()
+        {
+            _audioSource = GetComponent<AudioSource>();
+        }
+
         #region -- API Calls --------------------------------------------------
         [ContextMenu("Test API Availability")]
         public void TestApiAvailability()
@@ -115,22 +123,34 @@ namespace PPGIA.X540.Project3.API
         [ContextMenu("Send Chat Message")]
         public void SendChatMessage()
         {
+            // Ensure there is an active session
             if (_session == null)
             {
                 Debug.LogWarning("No active session. Please initiate a session first.");
                 return;
             }
 
+            // Build the endpoint URL and payload
             var url = EndpointUrl(_chatEndpoint, _session.SessionId);
             var payload = new ChatServicePayload { message = _query };
 
+            // Make the API call. Expect an audio response.
             StartCoroutine(ApiClient.CallEndpointWithPostCoroutine(
                 url, _timeoutInSeconds, payload, (request) =>
             {
-                var body = request.downloadHandler?.text ?? string.Empty;
-                Debug.Log($"Chat response: {body}");
+                StartCoroutine(ApiClient.ReadAudioResponseCoroutine(
+                    request, (audioClip) =>
+                {
+                    if (audioClip == null)
+                    {
+                        Debug.LogError("AudioClip is null after download.");
+                        return;
+                    }
+
+                    _audioSource?.PlayOneShot(audioClip);
+                }));
             }));
         }
         #endregion -- API Calls ------------------------------------------------
     }
-}        
+}

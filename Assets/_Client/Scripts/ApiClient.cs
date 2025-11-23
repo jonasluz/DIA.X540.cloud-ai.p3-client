@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Text;
 
 using UnityEngine;
@@ -114,6 +115,41 @@ Response Body: {body}";
         {
             yield return CallEndpointCoroutine(
                 url, "DELETE", null, timeoutInSeconds, callbackOnSuccess);
+        }
+
+        internal static IEnumerator ReadAudioResponseCoroutine(
+            UnityWebRequest request,
+            Action<AudioClip> callbackOnSuccess)
+        {
+            byte[] audioBytes = request.downloadHandler.data;
+            if (audioBytes == null || audioBytes.Length == 0)
+            {
+                Debug.LogError("No audio data received.");
+                yield break;
+            }
+
+            // Save temporarily to file for loading as AudioClip
+            string tempPath = Path.Combine(Application.persistentDataPath, "tts_temp.ogg");
+            File.WriteAllBytes(tempPath, audioBytes);
+
+            using (var file = UnityWebRequestMultimedia.GetAudioClip(
+                "file://" + tempPath, AudioType.OGGVORBIS))
+            {
+                yield return file.SendWebRequest();
+
+                if (file.result == UnityWebRequest.Result.Success)
+                {
+                    AudioClip clip = DownloadHandlerAudioClip.GetContent(file);
+                    callbackOnSuccess?.Invoke(clip);
+                }
+                else
+                {
+                    Debug.LogError($"Error loading AudioClip: {file.error}");
+                }
+            }
+
+            // Remove temporary file
+            File.Delete(tempPath);
         }
     }
 
