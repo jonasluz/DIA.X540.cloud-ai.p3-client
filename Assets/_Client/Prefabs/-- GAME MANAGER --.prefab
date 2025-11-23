@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3228149243574310962}
+  - component: {fileID: 5034104198302478614}
+  - component: {fileID: 2870540532630303239}
+  - component: {fileID: 3085863286867829983}
   m_Layer: 0
   m_Name: -- GAME MANAGER --
   m_TagString: Untagged
@@ -33,6 +36,55 @@ Transform:
   - {fileID: 8663494998515940154}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5034104198302478614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050228793350555746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 08c29b4a94427e44598b2f1d4bc32893, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 394ce53ae03aab84c98352e044c8bed4, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!114 &2870540532630303239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050228793350555746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 177140e4f5a62c145a88b74bb8f02f59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PpgiaX540P3::PPGIA.X540.Project3.UIController
+--- !u!114 &3085863286867829983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050228793350555746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1ca38af0a96524893a60d620fa5791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PpgiaX540P3::PPGIA.X540.Project3.AppManager
+  _uiController: {fileID: 2870540532630303239}
+  _apiManager: {fileID: 4693018637014637836}
 --- !u!1 &4601626619299515270
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,13 +127,13 @@ AudioSource:
   m_GameObject: {fileID: 4601626619299515270}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 4597973050289367049, guid: b4346293b16e5254aadce52e891ff5e9, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_Resource: {fileID: 8300000, guid: 6613d523ef2496349a24abd07925f85a, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -177,7 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: PpgiaX540P3::PPGIA.X540.Project3.ApiClient
   _apiBaseUrlDev: http://127.0.0.1:8000
   _apiBaseUrlProd: https://gyzypaneqa.execute-api.us-east-1.amazonaws.com/api/
-  _environment: 0
+  _environment: 1
   _sessionInitEndpoint: /session/init
   _sessionCloseEndpoint: /session/close
   _chatEndpoint: /chat/
@@ -186,10 +238,10 @@ MonoBehaviour:
   _sttEndpoint: /stt/upload
   _clientId: unity-client
   _timeoutInSeconds: 10
-  _query: 'Onde o caso do ET de Varginha foi registrado? '
+  _query: "Ah, guru! Como \xE9 bom poder contar com suas orienta\xE7\xF5es!"
   _session:
-    session_id: 40abe282-9485-4bbd-aa3a-8d7209706626
-    created_at: 1763850149
+    session_id: 9686ca2a-302a-4ac8-8709-a98067d37530
+    created_at: 1763908462
   _audioSource: {fileID: 1118623755729130604}
 --- !u!1 &5836695571582163658
 GameObject:
