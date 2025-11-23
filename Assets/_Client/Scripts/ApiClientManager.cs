@@ -74,7 +74,7 @@ namespace PPGIA.X540.Project3.API
         }
 
         #region -- API Calls --------------------------------------------------
-        [ContextMenu("Test API Availability")]
+        [ContextMenu("API Tests/API Availability")]
         public void TestApiAvailability()
         {
             var url = EndpointUrl("");
@@ -87,7 +87,7 @@ namespace PPGIA.X540.Project3.API
             }));
         }
 
-        [ContextMenu("Initiate Session")]
+        [ContextMenu("Session/Initiate Session")]
         public void InitiateSession()
         {
             StopAllCoroutines();
@@ -103,7 +103,7 @@ namespace PPGIA.X540.Project3.API
             }));
         }
 
-        [ContextMenu("Close Session")]
+        [ContextMenu("Session/Close Session")]
         public void CloseSession()
         {    
             if (_session == null)
@@ -124,7 +124,7 @@ namespace PPGIA.X540.Project3.API
             }));
         }
 
-        [ContextMenu("Send Chat Message")]
+        [ContextMenu("Chat/Send Message")]
         public void SendChatMessage()
         {
             // Ensure there is an active session
@@ -168,5 +168,14 @@ namespace PPGIA.X540.Project3.API
             }));
         }
         #endregion -- API Calls ------------------------------------------------
+
+        [ContextMenu("Debug/Play or Stop Test Audio")]
+        public void PlayTestAudio()
+        {
+            if (_audioSource == null) return;
+
+            if (_audioSource.isPlaying) _audioSource.Stop();
+            else _audioSource?.Play();
+        }
     }
 }
