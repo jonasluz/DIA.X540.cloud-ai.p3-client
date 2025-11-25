@@ -440,6 +440,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 796320736253214861, guid: 004ea84725223334994cf72d2115c180, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -7600268988427216071, guid: b4346293b16e5254aadce52e891ff5e9, type: 2}
+    - target: {fileID: 1938294408165125026, guid: 004ea84725223334994cf72d2115c180, type: 3}
+      propertyPath: _fileName
+      value: RecordedAudio.wav
+      objectReference: {fileID: 0}
+    - target: {fileID: 1938294408165125026, guid: 004ea84725223334994cf72d2115c180, type: 3}
+      propertyPath: _selectedMicrophoneIndex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3050228793350555746, guid: 004ea84725223334994cf72d2115c180, type: 3}
       propertyPath: m_Name
       value: -- GAME MANAGER --
