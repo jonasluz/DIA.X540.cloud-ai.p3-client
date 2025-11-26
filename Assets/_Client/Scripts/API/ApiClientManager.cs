@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections;
 using System.Linq;
 
@@ -7,7 +8,6 @@ using UnityEngine;
 
 namespace PPGIA.X540.Project3.API
 {
-    [RequireComponent(typeof(AudioSource))]
     public class ApiClientManager : MonoBehaviour
     {
         #region -- Inspector Fields -------------------------------------------
@@ -29,7 +29,7 @@ namespace PPGIA.X540.Project3.API
         private string _sessionCloseEndpoint = "/session/close";
 
         [SerializeField]
-        private string _chatEndpoint = "/chat/";
+        private string _chatEndpoint = "/chat";
 
         [SerializeField]
         private string _llmAgentEndpoint = "/agent/ask";
@@ -38,7 +38,13 @@ namespace PPGIA.X540.Project3.API
         private string _ttsEndpoint = "/tts/synthesize";
 
         [SerializeField]
-        private string _sttEndpoint = "/stt/upload";
+        private string _sttUploadEndpoint = "/transcript/get-upload-url";
+
+        [SerializeField]
+        private string _sttStartEndpoint = "/transcript/start";
+
+        [SerializeField]
+        private string _sttDownloadEndpoint = "/transcript/download";
 
         [Header("API Settings & Workload")]
         [SerializeField]
@@ -73,7 +79,10 @@ namespace PPGIA.X540.Project3.API
 
         void Awake()
         {
-            _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+                _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+                Debug.LogWarning("AudioSource component is missing.");
         }
 
         #region -- API Calls --------------------------------------------------
@@ -130,6 +139,135 @@ namespace PPGIA.X540.Project3.API
                 sessionClosedCallback?.Invoke();
             }));
         }
+
+        public void UploadAudioClip(
+            string localFilePath, Action<string> uploadCompletedCallback = null)
+        {
+            if (_session == null)
+            {
+                Debug.LogWarning("No active session. Please initiate a session first.");
+                return;
+            }
+
+            StopAllCoroutines();
+
+            var url = EndpointUrl(_sttUploadEndpoint, _session.SessionId);
+            var payload = new 
+            {
+                filename = Path.GetFileName(localFilePath),
+                content_type = "audio/wav"
+            };
+
+            StartCoroutine(ApiClient.CallEndpointWithPostCoroutine(
+                url, _timeoutInSeconds, payload, (request) =>
+            {
+                var body = request.downloadHandler?.text ?? string.Empty;
+                var uploadUrl = JsonUtility.FromJson<STTUploadResponse>(body)?.UploadUrl;
+                var s3Key = JsonUtility.FromJson<STTUploadResponse>(body)?.S3Key;
+                if (uploadUrl == null)
+                {
+                    Debug.LogWarning("Failed to get upload URL.");
+                    return;
+                }
+
+                StartCoroutine(ApiClient.UploadAudioDataCoroutine(
+                    uploadUrl, localFilePath, _timeoutInSeconds, (uploadRequest) =>
+                {
+                    Debug.Log($"Audio upload complete: {uploadRequest.responseCode}");
+                    uploadCompletedCallback?.Invoke(s3Key);
+                }));
+            }));
+        }
+
+
+        [ContextMenu("STT/Upload Audio Clip")]
+        public void StartTranscript(string s3Key,
+            Action<string> transcriptStartedCallback = null)
+        {
+            // Ensure there is an active session
+            if (_session == null)
+            {
+                Debug.LogWarning("No active session. Please initiate a session first.");
+                return;
+            }
+            if (string.IsNullOrEmpty(s3Key))
+            {
+                Debug.LogWarning("No file path provided for upload.");
+                return;
+            }
+
+            StopAllCoroutines();
+
+            // Build the endpoint URL
+            var url = EndpointUrl(_sttStartEndpoint);
+            var payload = new STTUploadResponse {
+                s3_key = s3Key
+            };
+
+            // Make the API call to upload the audio clip
+            StartCoroutine(ApiClient.CallEndpointWithPostCoroutine(
+                url, _timeoutInSeconds, payload, (request) =>
+            {
+                var body = request.downloadHandler?.text ?? string.Empty;
+                var response = ApiModel.FromJson<STTJobResponse>(body);
+                var jobName = response?.JobName;
+
+                Debug.Log($"Transcription job started: {jobName}");
+                transcriptStartedCallback?.Invoke(jobName);
+            }));
+        }
+
+        [ContextMenu("STT/Download Transcription")]
+        public void DownloadTranscription(string jobName,
+            Action<string> transcriptionReceivedCallback = null)
+        {
+            // Ensure there is an active session
+            if (_session == null)
+            {
+                Debug.LogWarning("No active session. Please initiate a session first.");
+                return;
+            }
+
+            StopAllCoroutines();
+
+            StartCoroutine(KeepCallingCoroutine(
+                EndpointUrl(_sttDownloadEndpoint, jobName), .5f,
+                transcriptionReceivedCallback
+            ));
+
+        }
+
+        private IEnumerator KeepCallingCoroutine(string url,
+            float delayInSeconds, Action<string> callback)
+        {
+            // Make the API call to download the transcription
+            var wait = new WaitForSeconds(delayInSeconds);
+
+            bool keepCalling = true;
+            while (keepCalling)
+            {
+                yield return wait;
+                yield return ApiClient.CallEndpointWithGetCoroutine(
+                    url, _timeoutInSeconds, (request) =>
+                {
+                    var body = request.downloadHandler?.text ?? string.Empty;
+                    var response = ApiModel.FromJson<STTJobResponse>(body);
+
+                    if (response.Status == "FAILED")
+                    {
+                        keepCalling = false;
+                        Debug.LogError("Transcription job failed.");
+                        callback?.Invoke(null);
+                    }
+                    else if (response.Status == "COMPLETED")
+                    {
+                        keepCalling = false;
+                        callback?.Invoke(response?.Transcript);
+                    }
+                });
+            }
+        }
+
 
         [ContextMenu("Chat/Send Message")]
         public void SendChatMessage(string message = null,

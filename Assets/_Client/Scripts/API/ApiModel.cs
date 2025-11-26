@@ -48,6 +48,30 @@ namespace PPGIA.X540.Project3.API
         public int ExpiresIn => expires_in;
     }
 
+    [Serializable]
+    public class STTUploadResponse : ApiModel
+    {
+        public string upload_url;
+        public string s3_key;
+
+        public string UploadUrl => upload_url;
+        public string S3Key => s3_key;
+    }
+
+    [Serializable]
+    public class STTJobResponse : ApiModel
+    {
+        public string job_name;
+        public string s3_uri;
+        public string status;
+        public string transcript;
+        
+        public string JobName => job_name;
+        public string S3Uri => s3_uri;
+        public string Status => status;
+        public string Transcript => transcript;
+    }
+
     internal enum Environment
     {
         Development,

@@ -18,6 +18,7 @@ namespace PPGIA.X540.Project3
             Hz96000 = 96000
         }
 
+        #region -- Fields & Properties ----------------------------------------
         [Header("Audio Capture Settings")]
         [SerializeField]
         private SampleRate _sampleRateInHz = SampleRate.Hz44100;
@@ -54,9 +55,14 @@ namespace PPGIA.X540.Project3
         private List<short> _capturedSamples = 
             new List<short>(1024 * 32); // filled only on Stop
         private int _channels = 1; // microphone channel count (Unity usually mono)
+        
         private AudioClip _recordingClip;
+        public AudioClip GetRecordedClip() => _recordingClip;
+        
         private string _currentDevice;
+        #endregion ------------------------------------------------------------
 
+        #region -- MonoBehaviour Methods --------------------------------------
         private void Awake()
         {
             _audioSource = GetComponent<AudioSource>();
@@ -67,6 +73,7 @@ namespace PPGIA.X540.Project3
         {
             StopRecording();
         }
+        #endregion ------------------------------------------------------------
 
         [ContextMenu("Start recording audio")]
         public void StartRecording()
@@ -215,7 +222,6 @@ namespace PPGIA.X540.Project3
                     writer.Write(dataBytes);
                 }
                 LastSavedFilePath = filePath;
-                Debug.Log($"Audio saved to: {filePath}");
                 OnRecordingSaved?.Invoke(filePath);
             }
             catch (Exception ex)
