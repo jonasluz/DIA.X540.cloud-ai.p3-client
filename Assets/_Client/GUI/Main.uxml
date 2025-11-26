@@ -1,11 +1,10 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_Client/GUI/Main.uss?fileID=7433441132597879392&amp;guid=fe550b4c3daa62b448a38ddf615910a6&amp;type=3#Main" />
     <ui:VisualElement name="VE_Panel" style="flex-grow: 1;">
-        <ui:Button text="Iniciar sessão" name="B_Session" />
-        <ui:Label text="Chat:" />
-        <ui:TextField placeholder-text="Digite sua mensagem" name="TF_ChatInput" class="expandable" />
-        <ui:Button text="Enviar mensagem" name="B_SendChat" />
+        <ui:Button text="Falar..." name="B_Talk" />
         <ui:ProgressBar value="0" title="Processando... Por favor, espere..." name="PB_Progress" enabled="true" />
-        <ui:TextField placeholder-text="response" multiline="true" readonly="true" name="TF_ChatOutput" class="expandable" />
+        <ui:ScrollView>
+            <ui:TextField placeholder-text="response" multiline="true" readonly="true" name="TF_Dialogue" class="expandable" />
+        </ui:ScrollView>
     </ui:VisualElement>
 </ui:UXML>

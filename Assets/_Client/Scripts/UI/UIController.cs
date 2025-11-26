@@ -6,40 +6,28 @@ using UnityEngine.UIElements;
 
 namespace PPGIA.X540.Project3
 {
-    [RequireComponent(typeof(UIController))]
+    [RequireComponent(typeof(UIDocument))]
     public class UIController : MonoBehaviour
     {
+        public enum UIState
+        {
+            Idle = 0,
+            Recording = 1,
+            Processing = 2
+        }
+
         private UIDocument _uiDocument;
         private VisualElement _root;
 
         #region -- Fields & Properties ----------------------------------------
-        // Buttons ------------------------------------------------------------
-        private readonly string[] _sessionButtonLabels = {
-            "Iniciar Sessão",
-            "Encerrar Sessão"
+        private readonly string[] _sendChatButtonLabels = {
+            "Falar...",
+            "Enviar...",
+            "Processando... Aguarde..."
         };
-        private Button _sessionButton;
-        private Button _sendChatButton;
 
-        private int _currentSessionState = 0;
-        public bool SessionActive
-        {
-            get => _currentSessionState == 1;
-            set
-            {
-                _currentSessionState = value ? 1 : 0;
-                _sessionButton.text = _sessionButtonLabels[_currentSessionState];
-                InputEnabled = value;
-            }
-        }
-
-        // Chat Fields --------------------------------------------------------
-        private TextField _chatInputField;
-        public string ChatInput
-        {
-            get => _chatInputField.value;
-            set => _chatInputField.value = value;
-        }
+        // UI controls --------------------------------------------------------
+        private Button _talkButton;
 
         private TextField _chatOutputField;
         public string ChatOutput
@@ -48,22 +36,6 @@ namespace PPGIA.X540.Project3
             set => _chatOutputField.value = value;
         }
 
-        public bool InputEnabled
-        {
-            get
-            {
-                var value = _chatInputField.enabledSelf;
-                _sendChatButton.SetEnabled(value);
-                return value;
-            }
-            set
-            {
-                _chatInputField.SetEnabled(value);
-                _sendChatButton.SetEnabled(value);
-            }
-        }
-
-        // Progress Bar -------------------------------------------------------
         private ProgressBar _progressBar;
         public float Progress
         {
@@ -71,9 +43,30 @@ namespace PPGIA.X540.Project3
             set => _progressBar.value = value;
         }
 
+        // State management ---------------------------------------------------
+        private UIState _currentState = UIState.Idle;
+        public UIState CurrentState
+        {
+            get => _currentState;
+            set
+            {
+                _currentState = value;
+                _talkButton.text = _sendChatButtonLabels[(int)value];
+                if (value == UIState.Processing)
+                {
+                    _talkButton.SetEnabled(false);
+                    _progressBar.value = 0.5f;
+                }
+                else
+                {
+                    _talkButton.SetEnabled(true);
+                    _progressBar.value = 0f;
+                }
+            }
+        }
+
         // Event Handlers -----------------------------------------------------
-        public event Action OnSessionButtonClicked;
-        public event Action<string> OnSendChatButtonClicked;
+        public event Action OnTalkButtonClicked;
 
         #endregion ------------------------------------------------------------
 
@@ -83,36 +76,43 @@ namespace PPGIA.X540.Project3
             _uiDocument = GetComponent<UIDocument>();
             _root = _uiDocument.rootVisualElement;
 
-            _sessionButton = _root.Q<Button>("B_Session");
-            _sendChatButton = _root.Q<Button>("B_SendChat");
-            _chatInputField = _root.Q<TextField>("TF_ChatInput");
-            _chatOutputField = _root.Q<TextField>("TF_ChatOutput");
+            _talkButton = _root.Q<Button>("B_Talk");
+            if (_talkButton == null)
+            {
+                Debug.LogError("Talk Button not found in UI.");
+            }
+
             _progressBar = _root.Q<ProgressBar>("PB_Progress");
+            if (_progressBar == null)
+            {
+                Debug.LogError("Progress Bar not found in UI.");
+            }
+
+            _chatOutputField = _root.Q<TextField>("TF_Dialogue");
+            if (_chatOutputField == null)
+            {
+                Debug.LogError("Chat Output Field not found in UI.");
+            }
+
+            CurrentState = UIState.Idle;
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
-            _sessionButton.clicked += OnSessionButtonClickedInternal;
-            _sendChatButton.clicked += OnSendChatButtonClickedInternal;
+            _talkButton.clicked += OnTalkButtonClickedInternal;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
-            _sessionButton.clicked -= OnSessionButtonClickedInternal;
-            _sendChatButton.clicked -= OnSendChatButtonClickedInternal;
+            _talkButton.clicked -= OnTalkButtonClickedInternal;
         }
         #endregion ------------------------------------------------------------
 
-        private void OnSessionButtonClickedInternal()
-        {
-            OnSessionButtonClicked?.Invoke();
-            // SessionActive state should be updated externally, no logic here.
-        }
+        private void OnTalkButtonClickedInternal() => OnTalkButtonClicked?.Invoke();
 
-        private void OnSendChatButtonClickedInternal()
+        public void AppendChatOutput(string newText)
         {
-            OnSendChatButtonClicked?.Invoke(_chatInputField.value);
-            _chatInputField.value = string.Empty;
+            ChatOutput += newText;
         }
     }
 }
