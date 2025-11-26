@@ -12,36 +12,72 @@ namespace PPGIA.X540.Project3
         private UIDocument _uiDocument;
         private VisualElement _root;
 
-        private readonly string[] _sessionButtonLabels = { 
-            "Iniciar Sessão", 
-            "Encerrar Sessão" 
+        #region -- Fields & Properties ----------------------------------------
+        // Buttons ------------------------------------------------------------
+        private readonly string[] _sessionButtonLabels = {
+            "Iniciar Sessão",
+            "Encerrar Sessão"
         };
         private Button _sessionButton;
         private Button _sendChatButton;
+
         private int _currentSessionState = 0;
+        public bool SessionActive
+        {
+            get => _currentSessionState == 1;
+            set
+            {
+                _currentSessionState = value ? 1 : 0;
+                _sessionButton.text = _sessionButtonLabels[_currentSessionState];
+                InputEnabled = value;
+            }
+        }
 
+        // Chat Fields --------------------------------------------------------
         private TextField _chatInputField;
-        private TextField _chatOutputField;
+        public string ChatInput
+        {
+            get => _chatInputField.value;
+            set => _chatInputField.value = value;
+        }
 
+        private TextField _chatOutputField;
         public string ChatOutput
         {
             get => _chatOutputField.value;
             set => _chatOutputField.value = value;
         }
 
-        public bool SessionActive {
-            get => _currentSessionState == 1;
+        public bool InputEnabled
+        {
+            get
+            {
+                var value = _chatInputField.enabledSelf;
+                _sendChatButton.SetEnabled(value);
+                return value;
+            }
             set
             {
-                _currentSessionState = value ? 1 : 0;
-                UpdateStateForSession();
+                _chatInputField.SetEnabled(value);
+                _sendChatButton.SetEnabled(value);
             }
         }
 
-        public Action OnSessionButtonClicked { get; set; }
-        public Action<string> OnSendChatButtonClicked { get; set; }
-        public float Progress { get; set; }
+        // Progress Bar -------------------------------------------------------
+        private ProgressBar _progressBar;
+        public float Progress
+        {
+            get => _progressBar.value;
+            set => _progressBar.value = value;
+        }
 
+        // Event Handlers -----------------------------------------------------
+        public event Action OnSessionButtonClicked;
+        public event Action<string> OnSendChatButtonClicked;
+
+        #endregion ------------------------------------------------------------
+
+        #region -- MonoBehaviour Methods --------------------------------------
         private void Awake()
         {
             _uiDocument = GetComponent<UIDocument>();
@@ -51,12 +87,11 @@ namespace PPGIA.X540.Project3
             _sendChatButton = _root.Q<Button>("B_SendChat");
             _chatInputField = _root.Q<TextField>("TF_ChatInput");
             _chatOutputField = _root.Q<TextField>("TF_ChatOutput");
-
-            SessionActive = false;
+            _progressBar = _root.Q<ProgressBar>("PB_Progress");
         }
 
         void OnEnable()
-        {            
+        {
             _sessionButton.clicked += OnSessionButtonClickedInternal;
             _sendChatButton.clicked += OnSendChatButtonClickedInternal;
         }
@@ -66,20 +101,12 @@ namespace PPGIA.X540.Project3
             _sessionButton.clicked -= OnSessionButtonClickedInternal;
             _sendChatButton.clicked -= OnSendChatButtonClickedInternal;
         }
-
-        private void UpdateStateForSession()
-        {
-            _sessionButton.text = _sessionButtonLabels[_currentSessionState];
-            
-            var enable = _currentSessionState == 1;
-            _chatInputField.SetEnabled(enable);
-            _sendChatButton.SetEnabled(enable);
-        }
+        #endregion ------------------------------------------------------------
 
         private void OnSessionButtonClickedInternal()
         {
             OnSessionButtonClicked?.Invoke();
-            // SessionActive state will be updated externally
+            // SessionActive state should be updated externally, no logic here.
         }
 
         private void OnSendChatButtonClickedInternal()
