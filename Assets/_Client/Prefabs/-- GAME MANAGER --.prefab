@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3050228793350555746
+--- !u!1 &164669483031671566
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,84 +8,32 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3228149243574310962}
-  - component: {fileID: 5034104198302478614}
-  - component: {fileID: 2870540532630303239}
-  - component: {fileID: 3085863286867829983}
+  - component: {fileID: 7970807069023951264}
   m_Layer: 0
-  m_Name: -- GAME MANAGER --
+  m_Name: -- Audio Manager --
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3228149243574310962
+--- !u!4 &7970807069023951264
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3050228793350555746}
+  m_GameObject: {fileID: 164669483031671566}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7625920793580372814}
   - {fileID: 8663494998515940154}
-  m_Father: {fileID: 0}
+  - {fileID: 4128215114116466198}
+  m_Father: {fileID: 3228149243574310962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5034104198302478614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3050228793350555746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
-  m_PanelSettings: {fileID: 11400000, guid: 08c29b4a94427e44598b2f1d4bc32893, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 394ce53ae03aab84c98352e044c8bed4, type: 3}
-  m_SortingOrder: 0
-  m_Position: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
-  m_PivotReferenceSize: 0
-  m_Pivot: 0
-  m_WorldSpaceCollider: {fileID: 0}
---- !u!114 &2870540532630303239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3050228793350555746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 177140e4f5a62c145a88b74bb8f02f59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PpgiaX540P3::PPGIA.X540.Project3.UIController
---- !u!114 &3085863286867829983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3050228793350555746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a1ca38af0a96524893a60d620fa5791, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: PpgiaX540P3::PPGIA.X540.Project3.AppManager
-  _uiController: {fileID: 2870540532630303239}
-  _apiManager: {fileID: 4693018637014637836}
---- !u!1 &4601626619299515270
+--- !u!1 &1759505303048597376
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,47 +41,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7625920793580372814}
-  - component: {fileID: 1118623755729130604}
-  - component: {fileID: 4693018637014637836}
+  - component: {fileID: 4128215114116466198}
+  - component: {fileID: 7584847903250953468}
   m_Layer: 0
-  m_Name: -- API Manager --
+  m_Name: Audio Output
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7625920793580372814
+--- !u!4 &4128215114116466198
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4601626619299515270}
+  m_GameObject: {fileID: 1759505303048597376}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3228149243574310962}
+  m_Father: {fileID: 7970807069023951264}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &1118623755729130604
+--- !u!82 &7584847903250953468
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4601626619299515270}
+  m_GameObject: {fileID: 1759505303048597376}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 4597973050289367049, guid: b4346293b16e5254aadce52e891ff5e9, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 6613d523ef2496349a24abd07925f85a, type: 3}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -215,6 +162,88 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &3050228793350555746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3228149243574310962}
+  - component: {fileID: 3085863286867829983}
+  m_Layer: 0
+  m_Name: -- GAME MANAGER --
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3228149243574310962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050228793350555746}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7625920793580372814}
+  - {fileID: 7970807069023951264}
+  - {fileID: 5087449153445061889}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3085863286867829983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050228793350555746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1ca38af0a96524893a60d620fa5791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PpgiaX540P3::PPGIA.X540.Project3.AppManager
+  _uiController: {fileID: 3705417928890449656}
+  _apiManager: {fileID: 4693018637014637836}
+  _audioCapture: {fileID: 1938294408165125026}
+--- !u!1 &4601626619299515270
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7625920793580372814}
+  - component: {fileID: 4693018637014637836}
+  m_Layer: 0
+  m_Name: -- API Manager --
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7625920793580372814
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601626619299515270}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3228149243574310962}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4693018637014637836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,14 +264,16 @@ MonoBehaviour:
   _chatEndpoint: /chat/
   _llmAgentEndpoint: /agent/ask
   _ttsEndpoint: /tts/synthesize
-  _sttEndpoint: /stt/upload
+  _sttUploadEndpoint: /transcript/get-upload-url
+  _sttStartEndpoint: /transcript/start
+  _sttDownloadEndpoint: /transcript/download
   _clientId: unity-client
   _timeoutInSeconds: 10
   _query: "Ah, guru! Como \xE9 bom poder contar com suas orienta\xE7\xF5es!"
   _session:
     session_id: 9686ca2a-302a-4ac8-8709-a98067d37530
     created_at: 1763908462
-  _audioSource: {fileID: 1118623755729130604}
+  _audioSource: {fileID: 7584847903250953468}
 --- !u!1 &5836695571582163658
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,10 +283,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8663494998515940154}
-  - component: {fileID: 1938294408165125026}
   - component: {fileID: 796320736253214861}
+  - component: {fileID: 1938294408165125026}
   m_Layer: 0
-  m_Name: -- AudioManager --
+  m_Name: Audio Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -274,22 +305,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3228149243574310962}
+  m_Father: {fileID: 7970807069023951264}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1938294408165125026
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5836695571582163658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9523fc2f4430eb549ab3da789eaf70c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PPGIA.X540.Project3.AudioCapture
-  _sampleRateInHz: 16000
-  _playingBack: 0
 --- !u!82 &796320736253214861
 AudioSource:
   m_ObjectHideFlags: 0
@@ -299,7 +316,7 @@ AudioSource:
   m_GameObject: {fileID: 5836695571582163658}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 4597973050289367049, guid: b4346293b16e5254aadce52e891ff5e9, type: 2}
+  OutputAudioMixerGroup: {fileID: -7600268988427216071, guid: b4346293b16e5254aadce52e891ff5e9, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -387,3 +404,91 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1938294408165125026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5836695571582163658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9523fc2f4430eb549ab3da789eaf70c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PPGIA.X540.Project3.AudioCapture
+  _sampleRateInHz: 16000
+  _maxRecordingSeconds: 300
+  _fileName: RecordedAudio.wav
+  _playbackVolume: 1
+  _enableMonitoring: 0
+  _monitorLatencyMs: 80
+  _microphones: []
+  _selectedMicrophoneIndex: 0
+--- !u!1 &7800601072168794597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5087449153445061889}
+  - component: {fileID: 1529497273491449657}
+  - component: {fileID: 3705417928890449656}
+  m_Layer: 0
+  m_Name: -- UI Manager --
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5087449153445061889
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7800601072168794597}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3228149243574310962}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1529497273491449657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7800601072168794597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 08c29b4a94427e44598b2f1d4bc32893, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 394ce53ae03aab84c98352e044c8bed4, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!114 &3705417928890449656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7800601072168794597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 177140e4f5a62c145a88b74bb8f02f59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PpgiaX540P3::PPGIA.X540.Project3.UIController
