@@ -108,13 +108,13 @@ namespace PPGIA.X540.Project3
                                         _uiController.AppendChatOutput($"Bot: {response}\n");
                                     }, () =>
                                     {
-                                        // Speech synthesis finished.
+                                        _uiController.CurrentState = UIController.UIState.Idle;
                                     });
-                                });
                             });
                         });
-
-            _uiController.CurrentState = UIController.UIState.Idle;
+                });
+ 
+            _uiController.CurrentState = UIController.UIState.Processing;
         }
 
         private void HandleTalkButtonClicked()

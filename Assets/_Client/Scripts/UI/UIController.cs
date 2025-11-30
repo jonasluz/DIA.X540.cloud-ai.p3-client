@@ -55,12 +55,12 @@ namespace PPGIA.X540.Project3
                 if (value == UIState.Processing)
                 {
                     _talkButton.SetEnabled(false);
-                    _progressBar.value = 0.5f;
+                    _progressBar.visible = true;
                 }
                 else
                 {
                     _talkButton.SetEnabled(true);
-                    _progressBar.value = 0f;
+                    _progressBar.visible = false;
                 }
             }
         }
