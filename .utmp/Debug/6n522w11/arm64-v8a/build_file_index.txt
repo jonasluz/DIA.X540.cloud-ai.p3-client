@@ -1,2 +1,0 @@
-P:\1. Doutorado\DIA.Nuvem-para-CD-IA\DIA.X540.cloud-ai\Project#3\unity-client\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
-P:\1. Doutorado\DIA.Nuvem-para-CD-IA\DIA.X540.cloud-ai\Project#3\unity-client\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt
